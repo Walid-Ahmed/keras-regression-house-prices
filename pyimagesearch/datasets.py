@@ -15,8 +15,12 @@ def load_house_attributes(inputPath):
 
 	# determine (1) the unique zip codes and (2) the number of data
 	# points with each zip code
-	zipcodes = df["zipcode"].value_counts().keys().tolist()
-	counts = df["zipcode"].value_counts().tolist()
+	#Pandas Index.value_counts() function returns object containing counts of unique values. The resulting object will be in descending order so that the first element is the most frequently-occurring element. Excludes NA values by default.
+	zipcodeSeries=df["zipcode"].value_counts()  #<class 'pandas.core.series.Series'>
+
+	zipcodes = zipcodeSeries.keys().tolist()   #zipcodes as list
+	counts = zipcodeSeries.tolist()    #count of zipcodes as list  
+
 
 	# loop over each of the unique zip codes and their corresponding
 	# count
@@ -24,12 +28,37 @@ def load_house_attributes(inputPath):
 		# the zip code counts for our housing dataset is *extremely*
 		# unbalanced (some only having 1 or 2 houses per zip code)
 		# so let's sanitize our data by removing any houses with less
+		print(zipcode, count)
 		# than 25 houses per zip code
 		if count < 25:
+			k=df["zipcode"] == zipcode
+			#print("k={}".format(k))
+			#input("press any key")
 			idxs = df[df["zipcode"] == zipcode].index
+			#print(idxs)
 			df.drop(idxs, inplace=True)
+	
 
+	zipcodeSeries=df["zipcode"].value_counts()  #<class 'pandas.core.series.Series'>
+
+	zipcodes = zipcodeSeries.keys().tolist()   #zipcodes as list
+	counts = zipcodeSeries.tolist()    #count of zipcodes as list  
+
+
+	# loop over each of the unique zip codes and their corresponding
+	# count
+	for (zipcode, count) in zip(zipcodes, counts):
+		print(zipcode, count)
+
+	print(idxs)
+	
 	# return the data frame
+
+
+
+
+
+
 	return df
 
 def process_house_attributes(df, train, test):

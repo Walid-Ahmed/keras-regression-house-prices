@@ -10,36 +10,90 @@ import numpy as np
 import argparse
 import locale
 import os
+import pandas as pd
+from sklearn.preprocessing import LabelBinarizer
+from sklearn import preprocessing
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--dataset", type=str, required=True,
-	help="path to input dataset of house images")
+ap.add_argument("-d", "--dataset", type=str, required=True,help="path to input dataset of house images")
 args = vars(ap.parse_args())
 
 # construct the path to the input .txt file that contains information
 # on each house in the dataset and then load the dataset
 print("[INFO] loading house attributes...")
 inputPath = os.path.sep.join([args["dataset"], "HousesInfo.txt"])
-df = datasets.load_house_attributes(inputPath)
+
+
+cols = ["bedrooms", "bathrooms", "area", "zipcode", "price"]
+df = pd.read_csv(inputPath, sep=" ", header=None, names=cols)
+
+# determine (1) the unique zip codes and (2) the number of data
+# points with each zip code
+#Pandas Index.value_counts() function returns object containing counts of unique values. The resulting object will be in descending order so that the first element is the most frequently-occurring element. Excludes NA values by default.
+zipcodeSeries=df["zipcode"].value_counts()  #<class 'pandas.core.series.Series'>
+
+zipcodes = zipcodeSeries.keys().tolist()   #zipcodes as list
+counts = zipcodeSeries.tolist()    #count of zipcodes as list  
+
+
+
+# loop over each of the unique zip codes and their corresponding
+# count
+for (zipcode, count) in zip(zipcodes, counts):
+		# the zip code counts for our housing dataset is *extremely*
+		# unbalanced (some only having 1 or 2 houses per zip code)
+		# so let's sanitize our data by removing any houses with less
+		# than 25 houses per zip code
+		if count < 25:
+			booleanVal=(df["zipcode"] == zipcode)  # this will be true at all zipcodes that should be deleted
+			#print(type(booleanVal))   #<class 'pandas.core.series.Series'>
+			idxs = df[booleanVal].index  #this will return indices of these true values
+			df.drop(idxs, inplace=True)
+	
+
+
+column_names_to_normalize = ["bedrooms", "bathrooms", "area","price"]  #continous data
+x = df[column_names_to_normalize].values
+min_max_scaler = preprocessing.MinMaxScaler()
+x_scaled = min_max_scaler.fit_transform(x)
+df_temp = pd.DataFrame(x_scaled, columns=column_names_to_normalize, index = df.index)
+df[column_names_to_normalize] = df_temp
+#print the first 5 lines
+print(df.head())
+
+
+df['zipcode']=pd.Categorical(df['zipcode'])
+dfDummies = pd.get_dummies(df['zipcode'], prefix = 'zipcode')
+print(dfDummies.head())
+df = pd.concat([df, dfDummies], axis=1)
+del df['zipcode']
+print(df.head())
+
+
+
+
 
 # construct a training and testing split with 75% of the data used
 # for training and the remaining 25% for evaluation
 print("[INFO] constructing training/testing split...")
 (train, test) = train_test_split(df, test_size=0.25, random_state=42)
 
-# find the largest house price in the training set and use it to
-# scale our house prices to the range [0, 1] (this will lead to
-# better training and convergence)
-maxPrice = train["price"].max()
-trainY = train["price"] / maxPrice
-testY = test["price"] / maxPrice
 
-# process the house attributes data by performing min-max scaling
-# on continuous features, one-hot encoding on categorical features,
-# and then finally concatenating them together
-print("[INFO] processing data...")
-(trainX, testX) = datasets.process_house_attributes(df, train, test)
+trainX=(train.drop('price', axis=1)).values
+trainY=train["price"].values
+testX=(test.drop('price', axis=1)).values
+testY=test["price"].values
+
+print(trainX[0,:])
+print(trainX.shape)
+print(testX.shape)
+print(trainY.shape)
+print(testY.shape)
+
+exit()
+
+#(trainX, testX) = datasets.process_house_attributes(df, train, test)
 
 # create our MLP and then compile the model using mean absolute
 # percentage error as our loss, implying that we seek to minimize
