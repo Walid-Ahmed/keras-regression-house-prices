@@ -53,7 +53,7 @@ for (zipcode, count) in zip(zipcodes, counts):
 	
 
 
-column_names_to_normalize = ["bedrooms", "bathrooms", "area","price"]  #continous data
+column_names_to_normalize = ["bedrooms", "bathrooms", "area"]  #continous data
 x = df[column_names_to_normalize].values
 min_max_scaler = preprocessing.MinMaxScaler()
 x_scaled = min_max_scaler.fit_transform(x)
@@ -79,11 +79,21 @@ print(df.head())
 print("[INFO] constructing training/testing split...")
 (train, test) = train_test_split(df, test_size=0.25, random_state=42)
 
+maxPrice = train["price"].max()
+print(maxPrice)
+exit()
 
 trainX=(train.drop('price', axis=1)).values
 trainY=train["price"].values
+
+
+
 testX=(test.drop('price', axis=1)).values
+testX=testX/maxPrice
+
 testY=test["price"].values
+testY=testY/maxPrice
+
 
 print(trainX[0,:])
 print(trainX.shape)
@@ -91,7 +101,7 @@ print(testX.shape)
 print(trainY.shape)
 print(testY.shape)
 
-exit()
+
 
 #(trainX, testX) = datasets.process_house_attributes(df, train, test)
 
