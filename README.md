@@ -11,9 +11,7 @@ usage 'python  housePrice_regression.py'
 The model used is as the following:
 <img src="https://github.com/Walid-Ahmed/keras-regression-house-prices/blob/master/sampleImages/model.png">
 
-The dataset is from   https://github.com/emanhamed/Houses-dataset
-
-The house dataset includes four numerical and categorical attributes:
+The dataset is from   https://github.com/emanhamed/Houses-dataset, the house dataset includes four numerical and categorical attributes:
 1. Number of bedrooms (continous)
 2. Number of bathrooms(continous)
 3. Area (continous)
