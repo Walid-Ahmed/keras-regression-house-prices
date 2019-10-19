@@ -1,6 +1,6 @@
 # keras-regression-house-prices
 
-Special thanks to  for his [great post](https://www.pyimagesearch.com/2019/01/21/regression-with-keras/) 
+Special thanks to [Adrian Rosebrock](https://www.pyimagesearch.com/author/adrian/)   for his [great post](https://www.pyimagesearch.com/2019/01/21/regression-with-keras/) 
 
 This is a simple code that create and train a neural network to predict house prices
 
