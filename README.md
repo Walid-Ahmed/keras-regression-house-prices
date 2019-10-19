@@ -22,7 +22,7 @@ The house dataset includes four numerical and categorical attributes:
 
 When training finishes the following, curves shown the traning and validation  loss is shown. Another curce will also be shown for actualvs predicted prices. Both curves are saved to local drive
 
-<img src="https://media.licdn.com/dms/image/C510BAQHDjJMzWUhMfg/company-logo_200_200/0?e=2159024400&v=beta&t=19_Z0-NTcopvhaoVQcyP-75Mhkp9Fh5jHEixMRSTZBc">
+<img src="https://github.com/Walid-Ahmed/keras-regression-house-prices/blob/master/sampleImages/loss.png">
 
-<img src="https://media.licdn.com/dms/image/C510BAQHDjJMzWUhMfg/company-logo_200_200/0?e=2159024400&v=beta&t=19_Z0-NTcopvhaoVQcyP-75Mhkp9Fh5jHEixMRSTZBc">
+<img src="https://github.com/Walid-Ahmed/keras-regression-house-prices/blob/master/sampleImages/price.png">
 
