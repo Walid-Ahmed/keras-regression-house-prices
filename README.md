@@ -12,7 +12,7 @@ The model used is as the following:
 
 <img src="https://github.com/Walid-Ahmed/keras-regression-house-prices/blob/master/sampleImages/model.png"  align="middle">
 
-The dataset is from   https://github.com/emanhamed/Houses-dataset, the house dataset includes four numerical and categorical attributes as input and the one continous variable as output:
+The dataset is from   https://github.com/emanhamed/Houses-dataset, this house dataset includes four numerical and categorical attributes as input and the one continous variable as output:
 1. Number of bedrooms (continous)
 2. Number of bathrooms(continous)
 3. Area (continous)
