@@ -2,10 +2,7 @@
 
 Special thanks to [Adrian Rosebrock](https://www.pyimagesearch.com/author/adrian/)   for his [great post](https://www.pyimagesearch.com/2019/01/21/regression-with-keras/) 
 
-This is simple code  creates and train a neural network to predict house prices
-
-usage 'python  housePrice_regression.py'
-
+This is simple code  creates and train a neural network to predict house prices, you can try it by running the command  'python  housePrice_regression.py'
 
 
 The model used is as the following:
