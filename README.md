@@ -7,7 +7,8 @@ This is a simple code that create and train a neural network to predict house pr
 usage 'python  housePrice_regression.py'
 
 
-The data set is from 
+The data set is from   https://github.com/emanhamed/Houses-dataset
+
 
 
 The house dataset includes four numerical and categorical attributes:
