@@ -25,6 +25,8 @@ from keras.layers import Flatten
 from keras.layers import Input
 from keras.models import Model
 import matplotlib.pyplot as plt
+from keras.utils import plot_model
+
 
 
 
@@ -119,7 +121,11 @@ model.add(Dense(8, input_dim=trainX.shape[1], activation="relu"))
 model.add(Dense(4, activation="relu"))
 model.add(Dense(1, activation="linear"))
 model.summary()
-
+plot_model(model, to_file='model.png')
+import matplotlib.image as mpimg
+img=mpimg.imread('model.png')
+imgplot = plt.imshow(img)
+plt.show()
 
 
 
