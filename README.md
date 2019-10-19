@@ -1,8 +1,8 @@
 # keras-regression-house-prices
 
-Special thanks to [Adrian Rosebrock](https://www.pyimagesearch.com/author/adrian/)   for his  [great post](https://www.pyimagesearch.com/2019/01/21/regression-with-keras/) thaw was uses as baseline for this tutourial.
+Special thanks to [Adrian Rosebrock](https://www.pyimagesearch.com/author/adrian/)   for his  [great post](https://www.pyimagesearch.com/2019/01/21/regression-with-keras/) thaw was used as baseline for this tutourial.
 
-This is simple code  creates and train a neural network to predict house prices, you can try it by running the command  'python  housePrice_regression.py'. You can also run thr code in your browser with the command 'ipython notebook housePrice_regression.ipynb'
+This  simple code  creates and train a neural network to predict house prices, you can try it by running the command  'python  housePrice_regression.py'. You can also run the code in your browser with the command 'ipython notebook housePrice_regression.ipynb'
 
 
 The model used is as the following:
