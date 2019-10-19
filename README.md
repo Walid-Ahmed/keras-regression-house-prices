@@ -21,7 +21,7 @@ The dataset is from   https://github.com/emanhamed/Houses-dataset, this house da
 
 The variable to precit is the price of the house
 
-When training finishes the following, curves shown the traning and validation  loss is shown. Another curce will also be shown for actualvs predicted prices. Both curves are saved to local drive
+When training finishes the following, curves will show the traning and validation. Another curve will also be shown for actual vs predicted prices. Both curves are saved to local drive. Also the trained  model is saved as housePrice.keras2 
 
 <img src="https://github.com/Walid-Ahmed/keras-regression-house-prices/blob/master/sampleImages/loss.png">
 
