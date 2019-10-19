@@ -1,7 +1,8 @@
 # USAGE
-# python mlp_regression.py \
+# python housePrice_regression.py 
 
 # import the necessary packages
+import tensorflow as tf
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -23,6 +24,8 @@ from keras.layers.core import Dense
 from keras.layers import Flatten
 from keras.layers import Input
 from keras.models import Model
+import matplotlib.pyplot as plt
+
 
 
 import numpy
@@ -53,13 +56,14 @@ for (zipcode, count) in zip(zipcodes, counts):
 			df.drop(idxs, inplace=True)
 	
 
-#Normalize  continous values to be netweeon 0 and 1
+#Normalize  continous values to be between 0 and 1
 column_names_to_normalize = ["bedrooms", "bathrooms", "area"]  #continous data
 x = df[column_names_to_normalize].values
 min_max_scaler = preprocessing.MinMaxScaler()
 x_scaled = min_max_scaler.fit_transform(x)
 df_temp = pd.DataFrame(x_scaled, columns=column_names_to_normalize, index = df.index)
 df[column_names_to_normalize] = df_temp
+print("[INFO] continous values normalize to be between 0 and 1")
 
 
 #change categoital data to one hot vector
@@ -68,6 +72,8 @@ dfDummies = pd.get_dummies(df['zipcode'], prefix = 'zipcode')
 print(dfDummies.head())
 df = pd.concat([df, dfDummies], axis=1)
 df.drop(['zipcode'],axis=1,inplace=True)
+print("[INFO] Zip code converted to one hot vector")
+
 
 
 
@@ -82,22 +88,27 @@ print("[INFO] constructing training/testing split...")
 
 
 
-maxPrice = train["price"].max()
 trainX=(train.drop('price', axis=1)).values
 trainY=train["price"].values
-trainY=trainY/maxPrice
 testX=(test.drop('price', axis=1)).values
 testY=test["price"].values
+print("[INFO] Preparying train and test data.")
+
+
+maxPrice = train["price"].max()
+trainY=trainY/maxPrice
 testY=testY/maxPrice
+print("[INFO] Normalized price by printing by max price")
 
 
 
 
 
-print(trainX.shape)
-print(testX.shape)
-print(trainY.shape)
-print(testY.shape)
+
+print("[INFO] trainX.shape ".format(trainX.shape))
+print("[INFO]testX.shape".format(testX.shape))
+print("[INFO] trainY.shape".format(trainY.shape))
+print("[INFO] testY.shape".format(testY.shape))
 
 
 
@@ -119,27 +130,52 @@ model.compile(loss="mean_absolute_percentage_error", optimizer=opt)
 
 # train the model
 print("[INFO] training model...")
-model.fit(trainX, trainY, validation_data=(testX, testY),epochs=200, batch_size=8)
-
+history=model.fit(trainX, trainY, validation_data=(testX, testY),epochs=200, batch_size=8)
+model.save("housePrice.keras2")
+print("[INFO] model saved to housePrice.keras2")
 # make predictions on the testing data
 print("[INFO] predicting house prices...")
 preds = model.predict(testX)
 
-# compute the difference between the *predicted* house prices and the
-# *actual* house prices, then compute the percentage difference and
-# the absolute percentage difference
-diff = preds.flatten() - testY
-percentDiff = (diff / testY) * 100
-absPercentDiff = np.abs(percentDiff)
+validationLoss=(history.history['val_loss'])
+trainingLoss=history.history['loss']
 
-# compute the mean and standard deviation of the absolute percentage
-# difference
-mean = np.mean(absPercentDiff)
-std = np.std(absPercentDiff)
 
-# finally, show some statistics on our model
-locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-print("[INFO] avg. house price: {}, std house price: {}".format(
-	locale.currency(df["price"].mean(), grouping=True),
-	locale.currency(df["price"].std(), grouping=True)))
-print("[INFO] mean: {:.2f}%, std: {:.2f}%".format(mean, std))
+
+epochs   = range(len(validationLoss)) # Get number of epochs
+
+ #------------------------------------------------
+ # Plot training and validation accuracy per epoch
+ #------------------------------------------------
+plt.plot  ( epochs,     trainingLoss ,label="Training Loss")
+plt.plot  ( epochs, validationLoss, label="Validation Loss" )
+plt.title ('Training and validation loss')
+plt.xlabel("Epoch #")
+plt.ylabel("Loss")
+fileToSaveAccuracyCurve="plot_acc.png"
+plt.savefig("plot_acc.png")
+print("[INFO] Loss curve saved to {}".format("plot_acc.png"))
+plt.legend(loc="upper right")
+
+
+
+plt.show()
+
+
+
+#readjust house prices
+testY=testY*maxPrice
+preds=preds*maxPrice
+
+#plot curves (Actual vs Predicted)
+plt.plot  ( testY ,label="Actual price")
+plt.plot  ( preds, label="Predicted price" )
+plt.title ('House prices')
+plt.xlabel("Point #")
+plt.ylabel("Price")
+plt.legend(loc="upper right")
+plt.show()
+plt.savefig("HousePrices.png")
+print("[INFO] predicted vs actual price saved to HousePrices.png")
+
+
