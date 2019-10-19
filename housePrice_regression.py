@@ -26,10 +26,6 @@ from keras.layers import Input
 from keras.models import Model
 import matplotlib.pyplot as plt
 from keras.utils import plot_model
-
-
-
-
 import numpy
 numpy.set_printoptions(threshold=sys.maxsize)
 
@@ -39,9 +35,10 @@ print("[INFO] loading house attributes...")
 inputPath =  "HousesInfo.txt"
 cols = ["bedrooms", "bathrooms", "area", "zipcode", "price"]
 df = pd.read_csv(inputPath, sep=" ", header=None, names=cols)
+print(df.head())
 
-# determine (1) the unique zip codes and (2) the number of data
-# points with each zip code
+
+#remove zipcounts that have kess than 25 houses
 #Pandas Index.value_counts() function returns object containing counts of unique values. The resulting object will be in descending order so that the first element is the most frequently-occurring element. Excludes NA values by default.
 zipcodeSeries=df["zipcode"].value_counts()  #<class 'pandas.core.series.Series'>
 zipcodes = zipcodeSeries.keys().tolist()   #zipcodes as list
@@ -56,7 +53,8 @@ for (zipcode, count) in zip(zipcodes, counts):
 			#print(type(booleanVal))   #<class 'pandas.core.series.Series'>
 			idxs = df[booleanVal].index  #this will return indices of these true values
 			df.drop(idxs, inplace=True)
-	
+print("[INFO]removed zipcodes which less than 25 houses")            
+
 
 #Normalize  continous values to be between 0 and 1
 column_names_to_normalize = ["bedrooms", "bathrooms", "area"]  #continous data
@@ -65,7 +63,7 @@ min_max_scaler = preprocessing.MinMaxScaler()
 x_scaled = min_max_scaler.fit_transform(x)
 df_temp = pd.DataFrame(x_scaled, columns=column_names_to_normalize, index = df.index)
 df[column_names_to_normalize] = df_temp
-print("[INFO] continous values normalize to be between 0 and 1")
+print("[INFO] Continous values normalize to be between 0 and 1")
 
 
 #change categoital data to one hot vector
@@ -74,7 +72,7 @@ dfDummies = pd.get_dummies(df['zipcode'], prefix = 'zipcode')
 print(dfDummies.head())
 df = pd.concat([df, dfDummies], axis=1)
 df.drop(['zipcode'],axis=1,inplace=True)
-print("[INFO] Zip code converted to one hot vector")
+print("[INFO] Zipcode converted to one hot vector")
 
 
 
@@ -86,15 +84,11 @@ print("[INFO] Zip code converted to one hot vector")
 # for training and the remaining 25% for evaluation
 print("[INFO] constructing training/testing split...")
 (train, test) = train_test_split(df, test_size=0.25, random_state=42)
-
-
-
-
 trainX=(train.drop('price', axis=1)).values
 trainY=train["price"].values
 testX=(test.drop('price', axis=1)).values
 testY=test["price"].values
-print("[INFO] Preparying train and test data.")
+print("[INFO]  train and test data prepared")
 
 
 maxPrice = train["price"].max()
@@ -107,10 +101,10 @@ print("[INFO] Normalized price by printing by max price")
 
 
 
-print("[INFO] trainX.shape ".format(trainX.shape))
-print("[INFO]testX.shape".format(testX.shape))
-print("[INFO] trainY.shape".format(trainY.shape))
-print("[INFO] testY.shape".format(testY.shape))
+print("[INFO] trainX.shape  {}".format(trainX.shape))
+print("[INFO]testX.shape {}".format(testX.shape))
+print("[INFO] trainY.shape {}".format(trainY.shape))
+print("[INFO] testY.shape {}".format(testY.shape))
 
 
 
@@ -139,19 +133,21 @@ print("[INFO] training model...")
 history=model.fit(trainX, trainY, validation_data=(testX, testY),epochs=200, batch_size=8)
 model.save("housePrice.keras2")
 print("[INFO] model saved to housePrice.keras2")
+
 # make predictions on the testing data
 print("[INFO] predicting house prices...")
 preds = model.predict(testX)
-
+print(preds)
+exit()
 validationLoss=(history.history['val_loss'])
 trainingLoss=history.history['loss']
 
 
 
-epochs   = range(len(validationLoss)) # Get number of epochs
 
- #------------------------------------------------
- # Plot training and validation accuracy per epoch
+#------------------------------------------------
+# Plot training and validation accuracy per epoch
+epochs   = range(len(validationLoss)) # Get number of epochs
  #------------------------------------------------
 plt.plot  ( epochs,     trainingLoss ,label="Training Loss")
 plt.plot  ( epochs, validationLoss, label="Validation Loss" )
@@ -162,9 +158,6 @@ fileToSaveAccuracyCurve="plot_acc.png"
 plt.savefig("plot_acc.png")
 print("[INFO] Loss curve saved to {}".format("plot_acc.png"))
 plt.legend(loc="upper right")
-
-
-
 plt.show()
 
 
@@ -172,7 +165,6 @@ plt.show()
 #readjust house prices
 testY=testY*maxPrice
 preds=preds*maxPrice
-
 #plot curves (Actual vs Predicted)
 plt.plot  ( testY ,label="Actual price")
 plt.plot  ( preds, label="Predicted price" )
