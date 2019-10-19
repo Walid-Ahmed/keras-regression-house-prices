@@ -1,5 +1,5 @@
 # USAGE
-# python mlp_regression.py --dataset Houses-dataset/Houses\ Dataset/
+# python mlp_regression.py \
 
 # import the necessary packages
 from keras.optimizers import Adam
@@ -107,6 +107,7 @@ model = Sequential()
 model.add(Dense(8, input_dim=trainX.shape[1], activation="relu"))
 model.add(Dense(4, activation="relu"))
 model.add(Dense(1, activation="linear"))
+model.summary()
 
 
 
