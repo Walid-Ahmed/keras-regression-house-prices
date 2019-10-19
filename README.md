@@ -17,6 +17,7 @@ The dataset is from   https://github.com/emanhamed/Houses-dataset, the house dat
 3. Area (continous)
 4. Zip code (Cateogiral)
 
+The variable to precit will be the price of the house
 
 When training finishes the following, curves shown the traning and validation  loss is shown. Another curce will also be shown for actualvs predicted prices. Both curves are saved to local drive
 
