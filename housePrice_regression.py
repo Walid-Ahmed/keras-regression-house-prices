@@ -137,8 +137,7 @@ print("[INFO] model saved to housePrice.keras2")
 # make predictions on the testing data
 print("[INFO] predicting house prices...")
 preds = model.predict(testX)
-print(preds)
-exit()
+
 validationLoss=(history.history['val_loss'])
 trainingLoss=history.history['loss']
 
