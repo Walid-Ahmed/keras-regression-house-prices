@@ -114,6 +114,7 @@ model = Sequential()
 model.add(Dense(8, input_dim=trainX.shape[1], activation="relu"))
 model.add(Dense(4, activation="relu"))
 model.add(Dense(1, activation="linear"))
+
 model.summary()
 plot_model(model, to_file='model.png')
 import matplotlib.image as mpimg
@@ -173,10 +174,9 @@ plt.title ('House prices')
 plt.xlabel("Point #")
 plt.ylabel("Price")
 plt.legend(loc="upper right")
-plt.show()
 plt.savefig("HousePrices.png")
+plt.show()
 print("[INFO] predicted vs actual price saved to HousePrices.png")
-
 
 
 
