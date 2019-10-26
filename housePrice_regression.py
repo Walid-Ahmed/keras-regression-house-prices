@@ -165,6 +165,8 @@ plt.show()
 testY=testY*maxPrice
 preds=preds*maxPrice
 #plot curves (Actual vs Predicted)
+
+
 plt.plot  ( testY ,label="Actual price")
 plt.plot  ( preds, label="Predicted price" )
 plt.title ('House prices')
@@ -174,5 +176,7 @@ plt.legend(loc="upper right")
 plt.show()
 plt.savefig("HousePrices.png")
 print("[INFO] predicted vs actual price saved to HousePrices.png")
+
+
 
 
