@@ -14,7 +14,7 @@ The dataset is from   https://github.com/emanhamed/Houses-dataset, this house da
 2. Number of bathrooms(continous)
 3. Area (continous)
 4. Zip code (Cateogiral)
-5.Price (continous)
+5. Price (continous)
 
 The variable to precit is the price of the house
 
